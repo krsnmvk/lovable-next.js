@@ -1,7 +1,22 @@
-import { caller } from '@/trpc/server';
+'use client';
 
-export default async function Home() {
-  const greeting = await caller.hello({ text: 'krisno mukti' });
+import { Button } from '@/components/ui/button';
+import { useTRPC } from '@/trpc/client';
+import { useMutation } from '@tanstack/react-query';
 
-  return <div className="p-4">{JSON.stringify(greeting, null, 2)}</div>;
+export default function Home() {
+  const trpc = useTRPC();
+  const { mutate, isPending } = useMutation(trpc.invoke.mutationOptions());
+
+  return (
+    <div className="p-4 max-w-7xl mx-auto">
+      <Button
+        type="button"
+        onClick={() => mutate({ value: 'krisno' })}
+        disabled={isPending}
+      >
+        Invoke
+      </Button>
+    </div>
+  );
 }
